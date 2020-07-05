@@ -59,7 +59,7 @@ router.post("/login", async (req, res, next) => {
     console.log(err.message);
   });
 
-  res.render("login");
+  res.redirect("/");
 });
 
 module.exports = router;
