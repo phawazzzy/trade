@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs', {title}) %>
+
+<body class="">
+    <div class="wrapper">
+        <%- include('./partials/sidebar.ejs', {}) %>
+
+        <div class="main-panel">
+            <!-- Navbar -->
+            <%- include('./partials/navbar.ejs', {}) %>
+
+            <!-- /Navbar -->
+            <!-- content -->
+            <div class="content">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-5 pb-2 mb-3">
+                    <h1 class="h2 rw"><%= (typeof url != 'undefined') ? 'Edit' : 'Upload' %> : <span class="text-info">Product</span></h1>
+                </div>
+                <form action='/dashboard/newproduct' method="post" enctype="multipart/form-data" id="productadd" class="col-lg-10 col-md-10 col-sm-10 col-xs-10"> 
+                    <%#- success ? success : '' %>
+
+                    <%- include('./fields/text.ejs', {fieldname: 'productName', fieldlabel: 'Product Name', fieldplaceholder: 'PRODUCT NAME HERE', valueField: (typeof result != 'undefined') ? result.productName : '' }) %>
+                    <%- include('./fields/file.ejs', {fieldname: 'productImage', fieldlabel: 'image front view', fieldPlaceholder: 'front view image', valueField: (typeof result != 'undefined') ? result.productImage1 : '' }) %>
+                    <br>
+                    <%- include('./fields/textarea.ejs', {fieldname: 'productDes',  fieldPlaceholder: 'A little Description on product', fieldlabel: 'product summary Description', valueField: (typeof result != 'undefined') ? result.productDescription : '' }) %>
+                    <%- include('./fields/number.ejs', {fieldname: 'productPrice', fieldlabel: 'Product Price', fieldplaceholder: 'Product Price here', valueField: (typeof result != 'undefined') ? result.productPrice : '' }) %>
+                    <%- include('./fields/text.ejs', {fieldname: 'location', fieldlabel: 'Set location', fieldplaceholder: 'location', valueField: (typeof result != 'undefined') ? result.loaction : '' }) %>
+                    <input type="hidden" id="locationLat" name="locationLat" />
+                    <input type="hidden" id="locationLng" name="locationLng" />
+
+                    
+                    <hr class="my-4"/>
+
+                    <div class="col-sm-10 ml-md-auto pl-0">
+
+                        <%- include('./fields/button.ejs', {fieldvalue:'CREATE PRODUCT', fieldname: 'submit'}) %>
+                        <a href="#" class="btn btn-success pull-right"><i class="fa fa-caret-left pr-2"> </i>Back to List</a>
+
+                    </div>
+
+                </form>
+            </div>
+            <!-- <end of content> -->
+
+            <!-- footer -->
+            <%- include('./partials/footer.ejs', {}) %>
+
+            <!-- /footer -->
+        </div>
+    </div>
+
+
+
+   
+    <%- include('./partials/script.ejs', {}) %>
+    <%- include('./partials/script2.ejs', {}) %>
+
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAm00Wsdh6jJB2QzlW5c6t_nu0gMRAZB9s&libraries=places"></script>
+    <script>
+        function initialize() {
+          var input = document.getElementById('location');
+          var autocomplete = new google.maps.places.Autocomplete(input);
+            google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                var place = autocomplete.getPlace();
+                document.getElementById('location').value = place.name;
+                document.getElementById('locationLat').value = place.geometry.location.lat();
+                document.getElementById('locationLng').value = place.geometry.location.lng();
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  
+      <script type="text/javascript">
+        CKbasic('productDescription');
+        CKbasic('specification');
+        CKfull('description');
+
+    </script>
+</body>
+
+</html>

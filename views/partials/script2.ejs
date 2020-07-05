@@ -1,0 +1,56 @@
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.ckeditor.com/4.11.2/full-all/ckeditor.js"></script>
+
+
+<script>
+    <% if (typeof success != 'undefined' && success != '' ) { %>
+         swal({
+             icon: 'success',
+             text: "<%= success %>"
+         });
+     <% } else if (typeof failure != 'undefined' && failure != ''){ %>
+         swal({
+             icon: 'error',
+             text: "<%= failure %>"
+         });
+     <% } %>
+    
+ $('.delete-item').click(function(event) {
+         event.preventDefault();
+         let delForm = $(this).parents('form');
+         swal({
+             title: "Are you sure?",
+             text: "Once deleted, there is no recovery possible!",
+             icon: "warning",
+             buttons: true,
+             dangerMode: true,
+         })
+         .then((willDelete) => {
+             if (willDelete) {
+                delForm.submit();
+             }
+         });
+     });
+
+      // Apply Ckeditor
+    function CKfull(fieldname) {
+        CKEDITOR.replace(fieldname, {
+            toolbar: [
+                {name:'basic', items:['Font','Format','FontSize','TextColor','BGColor','-','Bold','Italic','Underline','Strike','Subscript','Superscript','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Copy','Cut','Paste','PasteText','PasteFromWord','-','Image','-','NumberedList','BulletedList']},
+                '/',
+                {name:'insert', items: ['Link','Unlink','Outdent','Indent','SpecialChar','InsertPre','HorizontalRule','PageBreak','-','Image','-','SelectAll','RemoveFormat','Undo','Redo','Maximize']},
+            ],
+            height: 350
+        });
+    }
+
+    function CKbasic(fieldname) {
+        CKEDITOR.replace(fieldname, {
+            toolbar: [
+				{name:'basic', items:['Bold','Italic','Underline','-','Copy', 'TextColor', 'BGColor','Cut','Paste','PasteText','PasteFromWord','-','NumberedList','BulletedList','-','SelectAll','RemoveFormat','Undo','Redo']},
+			],
+            height: '100'
+        });
+    }
+ </script>

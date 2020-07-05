@@ -1,0 +1,72 @@
+<div class="sidebar" data-color="white" data-active-color="danger">
+    <!--
+      Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+  -->
+    <div class="logo">
+      <a href="http://www.creative-tim.com" class="simple-text logo-mini">
+        <div class="logo-image-small">
+          <img src="../assets/img/logo-small.png">
+        </div>
+      </a>
+      <a href="#" class="simple-text logo-normal">
+        Trade
+        <!-- <div class="logo-image-big">
+          <img src="../assets/img/logo-big.png">
+        </div> -->
+      </a>
+    </div>
+    <div class="sidebar-wrapper">
+      <ul class="nav">
+        <li class=" <%= (pagename== 'dashboard') ? 'active' : '' %>">
+          <a href="/">
+            <i class="fa fa-home"></i>
+
+            <p>Dashboard</p>
+          </a>
+        </li>
+        <li class=" <%= (pagename == 'product') ? 'active' : '' %>">
+          <a href="/dashboard/">
+            <!-- <i class="fa fa-store-alt"></i> -->
+            <i class="fa fa-product-hunt"></i>
+            <p>Products</p>
+          </a>
+        </li>
+        <!-- <li class=" <%= (pagename== 'orders') ? 'active' : '' %>">
+          <a href="/dashboard/orders">
+            <i class="fa fa-shopping-cart"></i>
+            <p>orders</p>
+          </a>
+        </li>
+        <li class=" <%= (pagename== 'slider') ? 'active' : '' %>"> 
+          <a href="/dashboard/sliders">
+            <i class="nc-icon nc-bell-55"></i>
+            <p>sliders</p>
+          </a>
+        </li> -->
+        <!-- <li>
+          <a href="#">
+            <i class="nc-icon nc-single-02"></i>
+            <p>SOmething</p>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="nc-icon nc-tile-56"></i>
+            <p>something</p>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="nc-icon nc-caps-small"></i>
+            <p>something</p>
+          </a>
+        </li>
+        <li class="active-pro">
+          <a href="/">
+            <i class="nc-icon nc-spaceship"></i>
+            <p>View website</p>
+          </a>
+        </li> -->
+      </ul>
+    </div>
+  </div>
