@@ -34,7 +34,7 @@ router.post("/signup", async (req, res, next) => {
     console.log(err.message);
   });
 
-  res.render("signup", { message: "create succesully" });
+  res.redirect("/");
 });
 
 router.post("/login", async (req, res, next) => {
