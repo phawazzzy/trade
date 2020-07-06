@@ -6,6 +6,19 @@ const firebase = require("firebase");
 const Auth = require("firebase/auth");
 const admin = require("firebase-admin");
 
+const firebaseAuth = firebase.auth();
+const logging = async (email, password) => {
+  const result = await firebaseAuth.signInWithEmailAndPassword(email, password);
+  try {
+    const { user } = result;
+    console.log(user.email);
+    return user;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
 const db = admin.firestore();
 
 /* GET users listing. */
@@ -19,7 +32,7 @@ router.get("/signup", (req, res, next) => {
 
 router.post("/signup", async (req, res, next) => {
   const { email, password } = req.body;
-  const firebaseAuth = firebase.auth();
+  // const firebaseAuth = firebase.auth();
   await firebaseAuth.createUserWithEmailAndPassword(email, password).then((user) => {
     console.log(user.user.uid);
     if (user) {
@@ -33,31 +46,24 @@ router.post("/signup", async (req, res, next) => {
     console.log(err.message);
   });
 
-  res.redirect("/");
+  res.render("signup", { message: "create succesully" });
 });
 
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
-  const firebaseAuth = firebase.auth();
-  await firebaseAuth.signInWithEmailAndPassword(email, password).then((user) => {
-    console.log("user signed in succesfully");
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        // User is signed in.
-        const { displayName } = user;
-        const { email } = user;
-        const { emailVerified } = user;
-        const { uid } = user;
-        const { providerData } = user;
-      } else {
-        console.log("no user available");
-      }
-    });
-  }).catch((err) => {
-    console.log(err.message);
-  });
-
+  const result = await firebaseAuth.signInWithEmailAndPassword(email, password);
+  try {
+    const { user } = result;
+    console.log(user.email);
+  } catch (error) {
+    console.log(error);
+  }
   res.redirect("/");
 });
 
-module.exports = router;
+router.get("/logout", async (req, res, next) => {
+  await firebaseAuth.signOut();
+  res.redirect("/");
+});
+
+module.exports = { router, logging };

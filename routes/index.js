@@ -51,16 +51,11 @@ router.post("/dashboard/newproduct", async (req, res) => {
 
 router.get("/", authChecker, async (req, res) => {
   const pagename = "dashboard";
-
   const allProducts = db.collection("products").where("location", "==", "lagos");
   const snapshot = await allProducts.get();
   // console.log(typeof snapshot.docs.data())
   const docs = snapshot.forEach((doc) => {
-    // console.log(doc.data())
-    //  let array = Object.values(snapshot.docs)
-    // return array
   });
-  // console.log(docs)
   res.render("products", { title: "product list", docs, pagename });
 });
 module.exports = router;
