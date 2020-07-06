@@ -19,7 +19,6 @@ router.get("/signup", (req, res, next) => {
 
 router.post("/signup", async (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email, password);
   const firebaseAuth = firebase.auth();
   await firebaseAuth.createUserWithEmailAndPassword(email, password).then((user) => {
     console.log(user.user.uid);
@@ -39,7 +38,6 @@ router.post("/signup", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email, password);
   const firebaseAuth = firebase.auth();
   await firebaseAuth.signInWithEmailAndPassword(email, password).then((user) => {
     console.log("user signed in succesfully");
