@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 const express = require("express");
 
@@ -63,7 +64,7 @@ router.post("/login", async (req, res, next) => {
 
 router.get("/logout", async (req, res, next) => {
   await firebaseAuth.signOut();
-  res.redirect("/");
+  res.redirect("/users/login");
 });
 
 module.exports = { router, logging };

@@ -51,11 +51,12 @@ router.post("/dashboard/newproduct", async (req, res) => {
 
 router.get("/", authChecker, async (req, res) => {
   const pagename = "dashboard";
-  const allProducts = db.collection("products").where("location", "==", "lagos");
-  const snapshot = await allProducts.get();
-  // console.log(typeof snapshot.docs.data())
-  const docs = snapshot.forEach((doc) => {
-  });
-  res.render("products", { title: "product list", docs, pagename });
+  if (req.user.role == "admin") {
+    console.log("this person is  an admin");
+    // db.collection()
+  } else {
+    console.log("not an admin");
+  }
+  res.render("products", { title: "product list", pagename });
 });
 module.exports = router;

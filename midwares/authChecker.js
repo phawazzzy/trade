@@ -10,14 +10,14 @@ const db = admin.firestore();
 
 const authCheker = (req, res, next) => {
   firebase.auth().onAuthStateChanged((user) => {
-    if (user == null) {
+    if (!user) {
       console.log("please login before your have access");
       return res.redirect("/users/login");
     }
     console.log("from authchecker", user.email);
     req.user = user.email;
+    next();
   });
-  next();
 };
 
 module.exports = authCheker;
