@@ -48,7 +48,7 @@ router.post("/dashboard/newproduct", async (req, res) => {
 
   console.log("success");
 
-  res.redirect("/dashboard");
+  res.redirect("/");
 });
 
 router.get("/", authChecker, async (req, res) => {
@@ -56,7 +56,7 @@ router.get("/", authChecker, async (req, res) => {
   let result;
   console.log("from index", req.user);
   if (req.user) {
-    console.log("this person is  an admin");
+    console.log("this person is auth");
     const productRef = db.collection("products");
     const snapshot = await productRef.get();
     result = snapshot.docs.map((doc) => doc.data());
@@ -65,6 +65,17 @@ router.get("/", authChecker, async (req, res) => {
     console.log("not an admin");
   }
   res.render("products", { title: "product list", pagename, result });
+});
+
+router.post("/products", async (req, res) => {
+  const pagename = "dashboard";
+  const { searchLocation, locationLat, locationLng } = req.body;
+  console.log(searchLocation, locationLat, locationLng);
+  let result;
+  const productRef = db.collection("products");
+  const snapshot = await productRef.where("locationLat", "==", locationLat).where("locationLng", "==", locationLng).get();
+  result = snapshot.docs.map((doc) => doc.data());
+  res.render("products", { title: `products in ${locationLat}`, pagename, result });
 });
 
 router.get("/product/:productName", async (req, res) => {
