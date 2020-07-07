@@ -32,7 +32,7 @@ admin.initializeApp({
 // var bucket = customApp.storage().bucket();
 
 const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users").router;
+const usersRouter = require("./routes/users");
 
 const app = express();
 

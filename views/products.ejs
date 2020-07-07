@@ -24,80 +24,26 @@
 
             <div class="content">
                 <ul class="product-list-basic">
+                    <% for(let i = 0; i< result.length; i++) { %>
                     <li>
         
                         <a href="#" class="product-photo">
-                            <img src="" height="130" alt="iPhone 6" />
+                            <img src="<%= result[i].fileUrl %>" height="130" alt="iPhone 6" />
                         </a>
         
                         <h2><a href="#">iPhone 6</a></h2>
                         <a href="#" class="product-compare">compare</a>
         
         
-                        <p class="product-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ornare sem
-                            sed nisl dignissim, facilisis dapibus lacus vulputate. Sed lacinia lacinia magna.</p>
+                        <p class="product-description"><%= result[i].productDes %></p>
         
-                        <button>view</button>
-                        <p class="product-price">$599.00</p>
-        
+                        <a href="/product/<%= result[i].productName %>"><button> view </button> </a>
+                        <p class="product-price">₦ <%= parseInt(result[i].productPrice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') %></p>
+                        
                     </li>
+                    <% } %>
         
-                    <li>
-        
-                        <a href="#" class="product-photo">
-                            <img src="" height="130" alt="Galaxy Alpha" />
-                        </a>
-        
-                        <h2><a href="#">HTC One</a></h2>
-                        <a href="#" class="product-compare">compare</a>
-        
-                        <div class="product-rating">
-                            <div>
-                                <span class="product-stars">
-                                    <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                        class="fa fa-star"></i><i class="fa fa-star"></i>
-                                </span>
-                            </div>
-        
-                            <span><a href="#">90 reviews</a></span>
-                        </div>
-        
-                        <p class="product-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ornare sem
-                            sed nisl dignissim, facilisis dapibus lacus vulputate. Sed lacinia lacinia magna.</p>
-        
-                        <button>Buy Now!</button>
-                        <p class="product-price">$599.00</p>
-        
-                    </li>
-        
-                    <li>
-        
-                        <a href="#" class="product-photo">
-                            <img src="" height="130" alt="Nokia Lumia" />
-                        </a>
-        
-                        <h2><a href="#">Sony Xperia</a></h2>
-                        <a href="#" class="product-compare">compare</a>
-        
-                        <div class="product-rating">
-                            <div>
-                                <span class="product-stars" style="width: 60px">
-                                    <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i
-                                        class="fa fa-star"></i><i class="fa fa-star"></i>
-                                </span>
-                            </div>
-        
-                            <span><a href="#">123 reviews</a></span>
-                        </div>
-        
-                        <p class="product-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ornare sem
-                            sed nisl dignissim, facilisis dapibus lacus vulputate. Sed lacinia lacinia magna.</p>
-        
-                        <span class="product-out-of-stock">Out of stock</span>
-                        <p class="product-price">$299.00</p>
-        
-                    </li>
-        
+                
                 </ul>
             </div>
         

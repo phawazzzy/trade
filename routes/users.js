@@ -8,17 +8,6 @@ const Auth = require("firebase/auth");
 const admin = require("firebase-admin");
 
 const firebaseAuth = firebase.auth();
-const logging = async (email, password) => {
-  const result = await firebaseAuth.signInWithEmailAndPassword(email, password);
-  try {
-    const { user } = result;
-    console.log(user.email);
-    return user;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-};
 
 const db = admin.firestore();
 
@@ -67,4 +56,4 @@ router.get("/logout", async (req, res, next) => {
   res.redirect("/users/login");
 });
 
-module.exports = { router, logging };
+module.exports = router;

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><%= title %> </title>
+    <%- include('./partials/head.ejs', {title}) %>
+
+    <link rel="stylesheet" href="/css/product-list-basic.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+</head>
+
+<body>
+    <style>
+        .image {
+            max-width: 20;
+            height: auto;
+            /* position:; */
+        } 
+    </style>
+    <div class="wrapper">
+        <%- include('./partials/sidebar.ejs', {}) %>
+
+        <div class="main-panel">
+            <%- include('./partials/navbar.ejs', {}) %>
+
+            <div class="content">
+               <div class="image">
+                <img src="<%= result.fileUrl %>" class="img-fluid img-thumbnail" style = "max-width: 50%; min-width: 50%; height: 10%;" alt="Responsive image">
+               </div>
+
+               <div>
+               <p class="font-weight-normal">Product Name: <%= result.productName %></p>
+               <p class="font-weight-normal">price: ₦ <%= parseInt(result.productPrice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') %></p>
+               <p class="font-weight-normal">description: <%= result.productDes %></p>
+               </div>
+               <div>
+               <form action="/product/comments" method="post" id="productadd" class="col-lg-10 col-md-10 col-sm-10 col-xs-10"> 
+                <%- include('./fields/textarea.ejs', {fieldname: 'comment',  fieldPlaceholder: 'drop your comment', fieldlabel: 'comment', valueField: (typeof result != 'undefined') ? result.comment : '' }) %>
+                <%- include('./fields/hidden.ejs', {fieldname: 'ref', valueField: (typeof result != 'undefined') ? result.productName : '' }) %>
+
+                <div class="col-sm-10 ml-md-auto pl-0">
+                <%- include('./fields/button.ejs', {fieldvalue:'send comment', fieldname: 'submit'}) %>
+                </div>
+               </form>
+               </div>
+               <br>
+               <!-- list of comments -->
+               <% if (result2 != undefined) {%>
+               <ul class="list-group">
+                   <% for(let i = 0; i< result2.length; i++) { %>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <%= result2[i].comment %>
+                 <a href="/comment/<%=result2[i].commentId %>"> <span class="badge badge-primary badge-pill">14</span> </a>
+                </li>
+
+                <% } %>
+               
+              </ul>
+              <% } else { %>
+                    <p>this post has no comment</p>
+                <% } %>
+            </div>
+        
+    </div>
+    </div>
+
+    <%- include('./partials/script.ejs', {}) %>
+    <%- include('./partials/script2.ejs', {}) %>
+
+    <script>
+
+    </script>
+</body>
+
+</html>
