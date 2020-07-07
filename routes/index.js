@@ -68,7 +68,7 @@ router.get("/", authChecker, async (req, res) => {
 });
 
 router.get("/product/:productName", async (req, res) => {
-  const pagename = "productDetails";
+  const pagename = "product";
   console.log(typeof req.params.productName);
   const productRef = db.collection("products").doc(req.params.productName);
   const doc = await productRef.get();
@@ -92,11 +92,12 @@ router.get("/product/:productName", async (req, res) => {
 
 router.post("/product/comments", authChecker, async (req, res) => {
   const { comment, ref } = req.body;
-  console.log(comment, ref, generate(5));
+  const random = generate(5);
+  console.log(comment, ref, random);
   const commentRef = db.collection("comments");
-  await commentRef.doc().set({
+  await commentRef.doc(random).set({
     ref,
-    commentId: generate(5),
+    commentId: random,
     comment
     // user: req.user.email
   }).then((result) => {
@@ -108,6 +109,52 @@ router.post("/product/comments", authChecker, async (req, res) => {
   });
 
   res.redirect(`/product/${ref}`);
+});
+
+router.get("/comment/:commentId", async (req, res) => {
+  const pagename = "product";
+  const { commentId } = req.params;
+  console.log(commentId);
+  const commentRef = db.collection("comments");
+  const doc = await commentRef.doc(commentId).get();
+  if (!doc.exists) {
+    console.log("Product not found");
+    return;
+  }
+  const result = doc.data();
+  console.log(result);
+  let result2;
+  if (result) {
+    const snapshot = await commentRef.where("ref", "==", commentId).get();
+    result2 = snapshot.docs.map((doc2) => doc2.data());
+    result2 = snapshot.empty ? undefined : result2;
+    console.log(typeof result2);
+  }
+
+  res.render("commentTemplate", {
+    title: "comments", result, result2, pagename
+  });
+});
+
+router.post("/comment/comments", authChecker, async (req, res) => {
+  const { comment, ref } = req.body;
+  const random = generate(5);
+  console.log(comment, ref, random);
+  const commentRef = db.collection("comments");
+  await commentRef.doc(random).set({
+    ref,
+    commentId: random,
+    comment
+    // user: req.user.email
+  }).then((result) => {
+    if (result) {
+      console.log("yayy...i got the result oo");
+    }
+  }).catch((e) => {
+    console.log(e);
+  });
+
+  res.redirect(`/comment/${ref}`);
 });
 
 module.exports = router;
