@@ -23,28 +23,37 @@
             <%- include('./partials/navbar.ejs', {}) %>
 
             <div class="content">
+                <% if(result.length < 0 ) { %>
+                    <ul class="product-list-basic">
+                        <% for(let i = 0; i< result.length; i++) { %>
+                        <li>
+            
+                            <a href="#" class="product-photo">
+                                <img src="<%= result[i].fileUrl %>" height="130" alt="<%= result[i].productName %>" />
+                            </a>
+            
+                            <h2><a href="#"><%= result[i].productName %></a></h2>
+                            <a href="#" class="product-compare">AVL in: <%= result[i].location %></a>
+            
+            
+                            <p class="product-description"><%= result[i].productDes %></p>
+            
+                            <a href="/product/<%= result[i].productName %>"><button> view </button> </a>
+                            <p class="product-price">₦ <%= parseInt(result[i].productPrice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') %></p>
+                            
+                        </li>
+                        <% } %>
+                    </ul>
+               <% }else { %>
+
                 <ul class="product-list-basic">
-                    <% for(let i = 0; i< result.length; i++) { %>
                     <li>
-        
-                        <a href="#" class="product-photo">
-                            <img src="<%= result[i].fileUrl %>" height="130" alt="iPhone 6" />
-                        </a>
-        
-                        <h2><a href="#">iPhone 6</a></h2>
-                        <a href="#" class="product-compare">compare</a>
-        
-        
-                        <p class="product-description"><%= result[i].productDes %></p>
-        
-                        <a href="/product/<%= result[i].productName %>"><button> view </button> </a>
-                        <p class="product-price">₦ <%= parseInt(result[i].productPrice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') %></p>
-                        
+                        <p class="product-description"> There is no product available in this region, please kindly check back</p>
                     </li>
-                    <% } %>
-        
-                
+                    
                 </ul>
+                <% } %>
+                
             </div>
         
     </div>

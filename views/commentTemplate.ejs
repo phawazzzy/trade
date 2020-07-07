@@ -50,7 +50,7 @@
                    <%for(let i = 0; i< result2.length; i++) { %>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                   <%= result2[i].comment %>
-                 <a href="/comment/<%=result2[i].commentId %>"> <span class="badge badge-primary badge-pill"><i class="fa fa-comments" aria-hidden="true"></i>
+                 <a href="/comment/<%=result2[i].commentId %>"> <span class="badge badge-primary badge-pill"><%= result2.length %><i class="fa fa-comments" aria-hidden="true"></i>
                  </span> </a>
                 </li>
 
