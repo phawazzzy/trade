@@ -2,10 +2,12 @@
 const express = require("express");
 
 const router = express.Router();
+const fs = require("fs");
 const firebase = require("firebase");
 const Auth = require("firebase/auth");
 const admin = require("firebase-admin");
 const { generate } = require("raidmaker");
+const sharp = require("sharp");
 const Cloudinary = require("../config/cloudinary");
 const mailer = require("../helpers/mailer");
 
@@ -23,16 +25,33 @@ router.post("/dashboard/newproduct", authChecker, async (req, res) => {
   } = req.body;
   console.log(req.body);
   const file = req.files.productImage;
-  console.log(file);
+  await sharp(file.tempFilePath)
+    .resize(200, 300, {
+      kernel: sharp.kernel.nearest,
+      fit: "contain",
+      position: "right top",
+      background: {
+        r: 255, g: 255, b: 255, alpha: 0.5
+      }
+    })
+    .toFile("output.png")
+    .then((result) => {
+      console.log(result);
+    // output.png is a 200 pixels wide and 300 pixels high image
+    // containing a nearest-neighbour scaled version
+    // contained within the north-east corner of a semi-transparent white canvas
+    });
+  // console.log(file);
 
   if (!productName || !productPrice || !productDes || !location) {
     console.log("please fill in all fields");
     return;
   }
 
-  const uploader = await Cloudinary.uploads(file.tempFilePath, "trade");
+  const uploader = await Cloudinary.uploads("./output.png", "trade");
   const fileUrl = uploader.url;
   const fileid = uploader.id;
+  fs.unlinkSync("output.png");
 
   await db.collection("products").doc(productName).set({
     productName,
