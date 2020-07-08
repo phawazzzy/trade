@@ -30,7 +30,7 @@
             <%- include('./partials/navbar.ejs', {}) %>
 
             <div class="content">
-                <%- include('./fields/commentHolder.ejs', {fieldname: 'comment',  fieldPlaceholder: 'drop your comment', fieldlabel: 'comment', valueField: (typeof result != 'undefined') ? result.comment : '' }) %>
+                <%- include('./fields/commentHolder.ejs', {fieldname: 'commentvalue',  fieldPlaceholder: 'drop your comment', fieldlabel: 'Reply to ', valueField: (typeof result != 'undefined') ? result.comment : '' }) %>
                
 
                <div>
@@ -43,16 +43,18 @@
                 </div>
                </form>
                </div>
-               <br>
+               <br> <br> <br>
+               
                <!-- list of comments -->
+               <div>
                <% if (result2 != undefined) {%>
                <ul class="list-group">
                    <%for(let i = 0; i< result2.length; i++) { %>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                  <%= result2[i].comment %>
+                    <p class="text-break"> <%- result2[i].comment %> </p>
                  <a href="/comment/<%=result2[i].commentId %>"> <span class="badge badge-primary badge-pill"><i class="fa fa-comments" aria-hidden="true"></i>
                  </span> </a>
-                </li>
+                </li >
 
                 <% } %>
                
@@ -68,7 +70,8 @@
     <%- include('./partials/script.ejs', {}) %>
     <%- include('./partials/script2.ejs', {}) %>
 
-    <script>
+    <script type="text/javascript">
+        CKbasic('comment');
 
     </script>
 </body>
