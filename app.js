@@ -6,6 +6,8 @@ const logger = require("morgan");
 const firebase = require("firebase");
 const admin = require("firebase-admin");
 const fileUpload = require("express-fileupload");
+const session = require("express-session");
+const flash = require("express-flash");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -23,13 +25,15 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+
 const serviceAccount = require("./trade-dbbd7-firebase-adminsdk-lt8xl-ad25cf0ac7.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: "trade-dbbd7.appspot.com"
+  storageBucket: "trade-dbbd7.appspot.com",
+  databaseURL: "https://trade-dbbd7.firebaseio.com"
 });
-// var bucket = customApp.storage().bucket();
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -45,6 +49,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.set("trust proxy", 1);
+app.use(session({
+  secret: "mysecrect",
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
+app.use(flash());
+
 app.use(fileUpload({
   useTempFiles: true
 }));

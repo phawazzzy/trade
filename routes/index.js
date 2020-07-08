@@ -7,6 +7,7 @@ const Auth = require("firebase/auth");
 const admin = require("firebase-admin");
 const { generate } = require("raidmaker");
 const Cloudinary = require("../config/cloudinary");
+const mailer = require("../helpers/mailer");
 
 const db = admin.firestore();
 const authChecker = require("../midwares/authChecker");
@@ -16,7 +17,7 @@ router.get("/dashboard", authChecker, (req, res) => {
   res.render("product", { title: "Dashboard", pagename });
 });
 
-router.post("/dashboard/newproduct", async (req, res) => {
+router.post("/dashboard/newproduct", authChecker, async (req, res) => {
   const {
     productName, productDes, productPrice, location, locationLng, locationLat
   } = req.body;
@@ -41,7 +42,8 @@ router.post("/dashboard/newproduct", async (req, res) => {
     locationLng,
     locationLat,
     fileUrl,
-    fileid
+    fileid,
+    poster: req.user
   }).catch((err) => {
     console.log(err.message);
   });
@@ -105,20 +107,37 @@ router.post("/product/comments", authChecker, async (req, res) => {
   const { comment, ref } = req.body;
   const random = generate(5);
   console.log(comment, ref, random);
-  const commentRef = db.collection("comments");
-  await commentRef.doc(random).set({
-    ref,
-    commentId: random,
-    comment
-    // user: req.user.email
-  }).then((result) => {
-    if (result) {
-      console.log("yayy...i got the result oo");
-    }
-  }).catch((e) => {
-    console.log(e);
-  });
-
+  try {
+    const commentRef = db.collection("comments");
+    await commentRef.doc(random).set({
+      ref,
+      commentId: random,
+      comment,
+      user: req.user
+    }).then(async (result) => {
+      if (result) {
+        const productRef = db.collection("products").doc(ref);
+        const doc = await productRef.get();
+        const email = doc.data().poster;
+        console.log(email);
+        const options = {
+          receiver: email,
+          subject: "Hello you have a comment on Trade",
+          text: "Hello",
+          output: ` <div>
+            <p>${comment}. </p>
+            <p> to reply please logon to Trade <p>
+          </div>`
+        };
+        mailer(options);
+        console.log("yayy...i got the result oo");
+      }
+    }).catch((e) => {
+      console.log(e);
+    });
+  } catch (error) {
+    console.log(error);
+  }
   res.redirect(`/product/${ref}`);
 });
 
@@ -155,11 +174,11 @@ router.post("/comment/comments", authChecker, async (req, res) => {
   await commentRef.doc(random).set({
     ref,
     commentId: random,
-    comment
-    // user: req.user.email
+    comment,
+    user: req.user
   }).then((result) => {
     if (result) {
-      console.log("yayy...i got the result oo");
+      console.log("yayy...i got the result");
     }
   }).catch((e) => {
     console.log(e);

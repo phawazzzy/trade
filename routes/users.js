@@ -13,40 +13,45 @@ const db = admin.firestore();
 
 /* GET users listing. */
 router.get("/login", (req, res, next) => {
-  res.render("login", {});
+  const error = req.flash("error");
+  res.render("login", { error });
 });
 
 router.get("/signup", (req, res, next) => {
-  res.render("signup");
+  const error = req.flash("error");
+  res.render("signup", { error });
 });
 
 router.post("/signup", async (req, res, next) => {
   const { email, password } = req.body;
-  // const firebaseAuth = firebase.auth();
-  await firebaseAuth.createUserWithEmailAndPassword(email, password).then((user) => {
-    console.log(user.user.uid);
+  try {
+    const user = await firebaseAuth.createUserWithEmailAndPassword(email, password);
+    console.log(user.user.email);
     if (user) {
       db.collection("user").doc().set({
         email,
         userId: user.user.uid,
         role: "customer"
-      });
+      }).then((result) => { console.log("user saved"); })
+        .catch((e) => console.log(e.message));
     }
-  }).catch((err) => {
-    console.log(err.message);
-  });
+  } catch (error) {
+    console.log(error.message);
+    req.flash("error", `${error.message}`);
+  }
 
   res.render("signup", { message: "create succesully" });
 });
 
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
-  const result = await firebaseAuth.signInWithEmailAndPassword(email, password);
   try {
+    const result = await firebaseAuth.signInWithEmailAndPassword(email, password);
     const { user } = result;
-    console.log(user.email);
+    console.log("from uer", user.uid);
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
+    req.flash("error", `${error.message}`);
   }
   res.redirect("/");
 });
